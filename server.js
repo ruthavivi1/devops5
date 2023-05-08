@@ -23,7 +23,9 @@ app.use(express.json());
 const data = JSON.parse(fs.readFileSync('./data.json'));
 
 app.get('/', (req, res) => {
-  res.send('hello');
+  res.sendFile(path.join(__dirname,'/register.html',(req,res)=>{
+    const { name, exam1, exam2, exam3 } = req.body;
+  }));
 });
 
 // ראוט לעמוד ה-REGISTER
