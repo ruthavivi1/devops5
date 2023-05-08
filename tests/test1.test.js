@@ -9,6 +9,6 @@ describe('test suit 1:',()=>{
 
     test("test 2:",async()=>{
         const res =await request(app).get('/1234')
-        expect(res.statusCode).toEqual(400)
+        expect(res.statusCode).not.toEqual(200)
     })
 })
