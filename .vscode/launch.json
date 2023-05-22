@@ -9,7 +9,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Server",
-            "program": "${workspaceFolder}/index.js",
+            "program": "${workspaceFolder}/server.js",
             "console": "integratedTerminal"
           }
         // {
