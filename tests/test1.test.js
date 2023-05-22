@@ -1,27 +1,27 @@
+// Import necessary libraries
+const axios = require('axios');
 
-const request = require('supertest');
-const app = require('../server');
+// Define the base URL of your server
+const baseURL = 'http://localhost:3000'; // Update with your server URL
 
-describe('GET /register', () => {
-  it('responds with 200 and students list when data fetched successfully', (done) => {
-    request(app)
-      .get('/register')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(200, done);
-  });
+// Define the student data for registration
+const studentData = {
+  name: 'John Doe',
+  exam1: 80,
+  exam2: 90,
+  exam3: 75
+};
 
-  it('responds with 500 and error message when data fetching fails', (done) => {
-    const mockDb = jest.spyOn(require('../db'), 'query').mockImplementation((query, callback) => {
-      callback(new Error('Error fetching data from the database'), null);
-    });
-    request(app)
-      .get('/register')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(500, { error: 'An error occurred while fetching data from the database' }, () => {
-        mockDb.mockRestore();
-        done();
-      });
-  });
-});
+// Function to register a student
+async function registerStudent() {
+  try {
+    // Send a POST request to the register endpoint with student data
+    const response = await axios.post(`${baseURL}/register`, studentData);
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Call the registerStudent function
+registerStudent();
