@@ -1,48 +1,52 @@
+// Import necessary libraries
 const express = require('express');
-const { Pool } = require('pg');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
+// Create express app
 const app = express();
 
-app.use(express.json());
+// Set up body-parser middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-const pool = new Pool({
-  user: 'your-db-user',
-  host: 'localhost',
-  database: 'your-db-name',
-  password: 'your-db-password',
-  port: 5432, // default PostgreSQL port
+// Connect to MongoDB database
+mongoose.connect('mongodb://username:password@my-mongo.example.com/mydatabase', { useNewUrlParser: true })
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
+
+// Define student schema
+const studentSchema = new mongoose.Schema({
+  name: String,
+  exam1: Number,
+  exam2: Number,
+  exam3: Number
 });
 
-// GET request to retrieve all registered students
-app.get('/register', async (req, res) => {
-  try {
-    const { rows } = await pool.query('SELECT * FROM students');
-    res.status(200).json(rows);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'An error occurred while fetching data from the database' });
-  }
+// Create student model
+const Student = mongoose.model('Student', studentSchema);
+
+// Define register page route
+app.get('/register', (req, res) => {
+  res.sendFile(__dirname + '/register.html');
 });
 
-// POST request to register a new student
-app.post('/register', async (req, res) => {
-  try {
-    const { name, exam1, exam2, exam3 } = req.body;
+// Define form submission route
+app.post('/register', (req, res) => {
+  // Create new student object from form data
+  const newStudent = new Student({
+    name: req.body.name,
+    exam1: req.body.exam1,
+    exam2: req.body.exam2,
+    exam3: req.body.exam3
+  });
 
-    // Validate exam scores
-    if (!Number.isInteger(exam1) || !Number.isInteger(exam2) || !Number.isInteger(exam3)) {
-      return res.status(400).json({ message: 'Exam scores must be integers' });
-    }
-
-    await pool.query('INSERT INTO students (name, exam1, exam2, exam3) VALUES ($1, $2, $3, $4)', [name, exam1, exam2, exam3]);
-    res.status(201).json({ message: 'Student registered successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'An error occurred while inserting data into the database' });
-  }
+  // Save new student to database
+  newStudent.save()
+    .then(() => res.send('Student registered successfully'))
+    .catch(err => console.log(err));
 });
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
-  
-});
+// Start server
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server running on port ${port}`));
