@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Connect to MongoDB database
-mongoose.connect('mongodb://username:password@my-mongo.example.com/mydatabase', { useNewUrlParser: true })
+mongoose.connect('mongodb+srv://lagami1235:08976453@cluster0.4m3lbad.mongodb.net/', { useNewUrlParser: true })
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
@@ -48,5 +48,5 @@ app.post('/register', (req, res) => {
 });
 
 // // Start server
-// const port = process.env.PORT || 3000;
-// app.listen(port, () => console.log(`Server running on port ${port}`));
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server running on port ${port}`));
