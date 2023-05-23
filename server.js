@@ -10,22 +10,22 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// // Connect to MongoDB database
-// mongoose
-//   .connect('mongodb+srv://lagami1235:08976453@cluster0.4m3lbad.mongodb.net/', { useNewUrlParser: true })
-//   .then(() => console.log('MongoDB Connected'))
-//   .catch(err => console.log(err));
+// Connect to MongoDB database
+mongoose
+  .connect('mongodb+srv://lagami1235:08976453@cluster0.4m3lbad.mongodb.net/', { useNewUrlParser: true })
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
 
-// // Define student schema
-// const studentSchema = new mongoose.Schema({
-//   name: String,
-//   exam1: Number,
-//   exam2: Number,
-//   exam3: Number
-// });
+// Define student schema
+const studentSchema = new mongoose.Schema({
+  name: String,
+  exam1: Number,
+  exam2: Number,
+  exam3: Number
+});
 
-// // Create student model
-// const Student = mongoose.model('Student', studentSchema);
+// Create student model
+const Student = mongoose.model('Student', studentSchema);
 
 // Define root route handler
 app.get('/', (req, res) => {
