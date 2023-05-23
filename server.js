@@ -11,7 +11,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Connect to MongoDB database
-mongoose.connect('mongodb+srv://lagami1235:08976453@cluster0.4m3lbad.mongodb.net/', { useNewUrlParser: true })
+mongoose
+  .connect('mongodb+srv://lagami1235:08976453@cluster0.4m3lbad.mongodb.net/', { useNewUrlParser: true })
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
@@ -25,6 +26,11 @@ const studentSchema = new mongoose.Schema({
 
 // Create student model
 const Student = mongoose.model('Student', studentSchema);
+
+// Define root route handler
+app.get('/', (req, res) => {
+  res.redirect('/register');
+});
 
 // Define register page route
 app.get('/register', (req, res) => {
@@ -42,11 +48,12 @@ app.post('/register', (req, res) => {
   });
 
   // Save new student to database
-  newStudent.save()
+  newStudent
+    .save()
     .then(() => res.send('Student registered successfully'))
     .catch(err => console.log(err));
 });
 
-// // Start server
+// Start server
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Server running on port`));
+app.listen(port, () => console.log(`Server running on port ${port}`));
